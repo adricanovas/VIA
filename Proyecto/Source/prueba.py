@@ -1,48 +1,45 @@
-#!/usr/bin/env python
+# Ejemplo de reproyección de histograma
 
-# ejemplo de selección de ROI
+# Seleccionando un roi y pulsando c se captura el modelo de
+# color de la región en forma de histograma y se muestra
+# la verosimilitud de cada pixel de la imagen en ese modelo.
 
 import numpy as np
 import cv2 as cv
 
-from umucv.util import ROI, putText
+from umucv.util import ROI
 from umucv.stream import autoStream
 
 cv.namedWindow("input")
-cv.moveWindow('input', 0, 0)
+roi = ROI("input")
 
-region = ROI("input")
 
-model = None
+def hist(x, redu=16):
+    return cv.calcHist([x],
+                       [0, 1, 2],  # canales a considerar
+                       None,  # posible máscara
+                       [redu, redu, redu],  # número de cajas en cada canal
+                       [0, 256] + [0, 256] + [0, 256])  # intervalo a considerar en cada canal
+
+
+H = None
 
 for key, frame in autoStream():
 
-    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY).astype(np.float32) / 255
+    if H is not None:
+        b, g, r = np.floor_divide(frame, 16).transpose(2, 0, 1)
+        L = H[b, g, r]  # indexa el array H simultáneamente en todos los
+        # pixels de la imagen.
+        cv.imshow("likelihood", L / L.max())
 
-    if region.roi:
-        [x1, y1, x2, y2] = region.roi
+    if roi.roi:
+        [x1, y1, x2, y2] = roi.roi
         if key == ord('c'):
-            model = gray[y1:y2 + 1, x1:x2 + 1]
-            cv.imshow("model", model)
-            region.roi = []
-
-        cv.rectangle(frame, (x1, y1), (x2, y2), color=(0, 255, 255), thickness=2)
-        putText(frame, f'{x2 - x1 + 1}x{y2 - y1 + 1}', orig=(x1, y1 - 8))
-
-    if model is not None:
-        cc = cv.matchTemplate(gray, model, cv.TM_CCORR_NORMED)
-        min_val, max_val, min_loc, max_loc = cv.minMaxLoc(cc)
-        # mr,mc = divmod(cc.argmax(),cc.shape[1])
-        # cv.imshow('CC',cc)
-        putText(cc, f'max correlation {max_val:.2f}')
-        cv.imshow('CC', (cc - min_val) / (max_val - min_val))
-        x1, y1 = max_loc
-        h, w = model.shape[:2]
-        x2 = x1 + w;
-        y2 = y1 + h
+            trozo = frame[y1:y2 + 1, x1:x2 + 1]
+            cv.imshow("trozo", trozo)
+            H = hist(trozo)
+            print(H.shape)
         cv.rectangle(frame, (x1, y1), (x2, y2), color=(0, 255, 255), thickness=2)
 
-    h, w, _ = frame.shape
-    putText(frame, f'{w}x{h}')
     cv.imshow('input', frame)
 
