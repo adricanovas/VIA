@@ -6,7 +6,6 @@ from collections import deque
 import numpy as np
 from umucv.util import putText
 
-
 points = deque(maxlen=2)
 
 def fun(event, x, y, flags, param):
@@ -24,11 +23,8 @@ for key, frame in autoStream():
         c = np.mean(points, axis=0).astype(int)
         d = np.linalg.norm(np.array(points[1]) - points[0])
         # Calculamos el valor del angulo
-        FOV = (np.arctan((d / 2) / 1011.52938)) * 180 / np.pi
-        FOV = round(FOV * 2, 2)
-        putText(frame, f'{FOV}' + '^º', c)
+        FOV = 2 * ((np.arctan((d / 2) / 1011.52938)) * 180 / np.pi)
+        putText(frame, str(float("{0:.2f}".format(FOV))), c)
+
     cv.imshow('webcam', frame)
-    key = cv.waitKey(1) & 0xFF
-    if key == ord("q"):
-            break
 cv.destroyAllWindows()
