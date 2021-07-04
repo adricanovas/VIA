@@ -10,13 +10,6 @@ import sys
 def drawPolygon(image, pts, color=(255, 0, 0), thickness=2):
     pts = pts.reshape((-1, 1, 2))
     isClosed = True
-    # Blue color in BGR
-    color = (255, 0, 0)
-    # Line thickness of 2 px
-    thickness = 2
-    # Using cv2.polylines() method
-    # Draw a Blue polygon with
-    # thickness of 1 px
     image = cv.polylines(
         image, [pts], isClosed, color, thickness)
     return image
@@ -55,18 +48,15 @@ cv.setMouseCallback('RECTIF', fun)
 
 puntos = np.array(preal)
 puntos = puntos.reshape((-1, 1, 2))
+
 # Rectificamos
 imgCopy = np.array(img)
 imgCopy = cv.polylines(imgCopy, [puntos], isClosed = True, color=(255, 0, 0), thickness=2)
 
-# Mostramos la imagen rectificada
 cv.imshow('RECTIF', imgCopy)
 
-# Obtiene la imagen rectificada a partir de la homografía
 imgreal = np.array(prectificados)
 imgCopy = np.array(img)
-print(puntos)
-print(np.array(prectificados).T.astype(int).reshape((-1, 1, 2)))
 H, _ = cv.findHomography(puntos, np.array(prectificados).reshape((-1, 1, 2)))
 
 rectificado = cv.warpPerspective(imgCopy, H, (1280, 720))
@@ -81,19 +71,10 @@ for key, frame in autoStream():
 
     if len(points) == 2:
         cv.line(rectificado, points[0], points[1], (0, 255, 0))
-
-        # Calcula la media por columnas de los puntos.
-        # Es decir, calcula el punto medio entre dos puntos
-        # Calcula la media en el eje 0.
-        c = np.mean(points, axis=0).astype(int)  # el astype(int) es para putText
+        c = np.mean(points, axis=0).astype(int)
         d = np.linalg.norm(np.array(points[0]) - points[1])
-
-        # Calcular la distancia entre los puntos
-
         tam = (d / escala)
-
         points = deque(maxlen=2)
-
         putText(rectificado, f'{tam:.1f} ', c)
 
     cv.imshow('RECTIF', rectificado)
