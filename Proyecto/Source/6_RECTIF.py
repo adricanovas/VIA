@@ -6,15 +6,6 @@ from umucv.stream import autoStream, sourceArgs
 from collections import deque
 from umucv.util import putText
 import sys
-
-def drawPolygon(image, pts, color=(255, 0, 0), thickness=2):
-    pts = pts.reshape((-1, 1, 2))
-    isClosed = True
-    image = cv.polylines(
-        image, [pts], isClosed, color, thickness)
-    return image
-
-
 def fun(event, x, y, flags, param):
     if event == cv.EVENT_LBUTTONDOWN:
         points.append((x, y))
@@ -38,7 +29,6 @@ file.close()
 
 # Carga la imagen
 img = cv.imread('../Images/6_RECTIF/' + srcimg)
-imgCopy = np.array(img)
 
 points = deque(maxlen=2)
 
@@ -50,23 +40,16 @@ puntos = np.array(preal)
 puntos = puntos.reshape((-1, 1, 2))
 
 # Rectificamos
-imgCopy = np.array(img)
-imgCopy = cv.polylines(imgCopy, [puntos], isClosed = True, color=(255, 0, 0), thickness=2)
-
-cv.imshow('RECTIF', imgCopy)
-
-imgreal = np.array(prectificados)
-imgCopy = np.array(img)
 H, _ = cv.findHomography(puntos, np.array(prectificados).reshape((-1, 1, 2)))
+rectificado = cv.warpPerspective(img, H, (1280, 720))
 
-rectificado = cv.warpPerspective(imgCopy, H, (1280, 720))
-cv.polylines(imgCopy, [np.array(preal)], True, (0, 0, 255), 2)
-cv.imshow('Resultado', imgCopy)
-rectificadoCpy = rectificado
+cv.polylines(img, [np.array(preal)], True, (255, 0, 0), 2)
+cv.imshow('Resultado', img)
+aux = rectificado
 for key, frame in autoStream():
 
     for p in points:
-        rectificado = np.array(rectificadoCpy)
+        rectificado = aux.copy()
         cv.circle(rectificado, p, 3, (0, 255, 0), -1)
 
     if len(points) == 2:
