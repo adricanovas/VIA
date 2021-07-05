@@ -27,8 +27,8 @@ for e in rectificados:
 escala = float(lines[3])
 file.close()
 
-# Carga la imagen
 img = cv.imread('../Images/6_RECTIF/' + srcimg)
+# Carga la imagen
 
 points = deque(maxlen=2)
 
