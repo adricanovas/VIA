@@ -1,30 +1,30 @@
-# Proyecto de Visión Artificial
+# Artificial Vision Project
 
-## Proyecto
+## Project
 
-Se han programado una serie de scripts en python que resuelven problemas de visión artificial haciendo uso de la librería de OpenCV.
+A series of Python scripts have been programmed to solve artificial vision problems using the OpenCV library.
 
-## Diseño
+## Design
 
-Cada script diseñado está comentado en un archivo notebook de Jupiter. En estos archivos se puede encontrar información de diseño e implementación, así como pruebas ejemplos y resultados de la aplicación de los mismos.
+Each designed script is commented in a Jupyter notebook file. These files contain design and implementation information, as well as examples and results of applying the scripts.
 
 ### Notebooks
 
-| Ejercicio | Descripción |
+| Exercise | Description |
 |---:|---|
-| Calibración | Se hace uso de imágnes de tamaño conocido para realizar una calibración de imágen |
-| Actividad | Detecta y evalua zonas de actividad de imágenes |
-| Color | Detecta objetos usando curvas ROI |
-| Filtros | Aplicación de diferentes filtros a imágenes |
-| Rectif | Rectifica la medición de distancias mediante el uso de análisis de imágenes y distancias |
-| Pano | Ejecuta un análisis de perspectivas de imágenes para elaborar una panorámica de imágenes homográficas  |
-| RA | Genera un objeto 3D en una superficie con puntos de referencia conocidos |
+| Calibration | Uses images of known size to perform image calibration |
+| Activity | Detects and evaluates activity zones in images |
+| Color | Detects objects using ROI curves |
+| Filters | Applies different filters to images |
+| Rectif | Rectifies distance measurements using image analysis and distances |
+| Pano | Performs image perspective analysis to create a homographic image panorama |
+| RA | Generates a 3D object on a surface with known reference points |
 
-### Entorno e Instalación
+### Environment and Installation
 
-Este proyecto se ha elaborado con el programa PyCharm del paquete InteliJ. La configuración se realiza mediante la instalación del archivo de requisitos _requierements.txt_. Se instalan las librerias necesarias para la ejecución del programa.
+This project has been developed using the PyCharm program from the IntelliJ package. The configuration is done by installing the requirements file _requirements.txt_. The necessary libraries for program execution are installed.
 
-> **Requisitos**: jupyter notebook, numpy, opencv-python
+> **Requirements**: jupyter notebook, numpy, opencv-python
 
 ```shell
 # python<version> -m venv <virtual_env_name>
@@ -33,8 +33,16 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Fuentes de Información
+## Sources of Information
 
 [VIA UMU](https://dis.um.es/profesores/alberto/vision.html)
 
-[Repositorio VIA](https://github.com/albertoruiz/umucv)
+[VIA Repository](https://github.com/albertoruiz/umucv)
+
+Citations:
+[1] https://opencv.org
+[2] https://opencv.org/about/
+[3] https://www.geeksforgeeks.org/opencv-overview/
+[4] https://viso.ai/computer-vision/opencv/
+[5] https://viso.ai/computer-vision/the-most-popular-computer-vision-tools/
+[6] https://www.superannotate.com/blog/computer-vision-libraries
